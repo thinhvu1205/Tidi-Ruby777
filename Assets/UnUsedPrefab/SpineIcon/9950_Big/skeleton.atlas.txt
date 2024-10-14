@@ -1,0 +1,160 @@
+
+skeleton.png
+size: 824,824
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1l
+  rotate: true
+  xy: 495, 695
+  size: 127, 87
+  orig: 127, 130
+  offset: 0, 19
+  index: -1
+body
+  rotate: false
+  xy: 2, 151
+  size: 491, 257
+  orig: 500, 414
+  offset: 9, 74
+  index: -1
+eye_left
+  rotate: false
+  xy: 804, 51
+  size: 18, 22
+  orig: 18, 22
+  offset: 0, 0
+  index: -1
+eye_right
+  rotate: false
+  xy: 771, 28
+  size: 23, 22
+  orig: 23, 22
+  offset: 0, 0
+  index: -1
+face
+  rotate: true
+  xy: 335, 509
+  size: 184, 263
+  orig: 185, 263
+  offset: 1, 0
+  index: -1
+head
+  rotate: false
+  xy: 2, 410
+  size: 331, 412
+  orig: 331, 412
+  offset: 0, 0
+  index: -1
+hoa
+  rotate: false
+  xy: 2, 8
+  size: 189, 141
+  orig: 193, 146
+  offset: 3, 5
+  index: -1
+longmay
+  rotate: false
+  xy: 193, 18
+  size: 131, 40
+  orig: 131, 42
+  offset: 0, 0
+  index: -1
+moi1
+  rotate: false
+  xy: 435, 4
+  size: 83, 60
+  orig: 83, 60
+  offset: 0, 0
+  index: -1
+moi2
+  rotate: false
+  xy: 520, 26
+  size: 82, 38
+  orig: 82, 38
+  offset: 0, 0
+  index: -1
+phai_duoi
+  rotate: false
+  xy: 573, 6
+  size: 53, 18
+  orig: 54, 21
+  offset: 0, 0
+  index: -1
+phai_tren
+  rotate: false
+  xy: 520, 5
+  size: 51, 19
+  orig: 51, 20
+  offset: 0, 1
+  index: -1
+rec
+  rotate: false
+  xy: 603, 455
+  size: 208, 367
+  orig: 208, 367
+  offset: 0, 0
+  index: -1
+rec_1
+  rotate: false
+  xy: 603, 99
+  size: 198, 354
+  orig: 198, 354
+  offset: 0, 0
+  index: -1
+sau
+  rotate: false
+  xy: 335, 713
+  size: 128, 109
+  orig: 128, 131
+  offset: 0, 0
+  index: -1
+tocsau
+  rotate: true
+  xy: 394, 66
+  size: 83, 207
+  orig: 83, 242
+  offset: 0, 35
+  index: -1
+tocsau2
+  rotate: true
+  xy: 604, 29
+  size: 68, 165
+  orig: 69, 165
+  offset: 0, 0
+  index: -1
+trai_duoi
+  rotate: false
+  xy: 771, 75
+  size: 32, 22
+  orig: 34, 26
+  offset: 2, 3
+  index: -1
+trai_tren
+  rotate: false
+  xy: 771, 52
+  size: 31, 21
+  orig: 31, 23
+  offset: 0, 1
+  index: -1
+trongmat
+  rotate: false
+  xy: 326, 19
+  size: 107, 39
+  orig: 108, 40
+  offset: 1, 1
+  index: -1
+truoc
+  rotate: true
+  xy: 495, 403
+  size: 104, 106
+  orig: 104, 106
+  offset: 0, 0
+  index: -1
+txt
+  rotate: false
+  xy: 193, 60
+  size: 199, 89
+  orig: 199, 90
+  offset: 0, 1
+  index: -1

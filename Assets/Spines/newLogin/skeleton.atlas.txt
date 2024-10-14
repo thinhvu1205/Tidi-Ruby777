@@ -1,0 +1,55 @@
+
+skeleton.png
+size: 692,364
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Play guest
+  rotate: true
+  xy: 662, 53
+  size: 307, 26
+  orig: 307, 26
+  offset: 0, 0
+  index: -1
+account
+  rotate: false
+  xy: 2, 2
+  size: 166, 63
+  orig: 166, 63
+  offset: 0, 0
+  index: -1
+ef
+  rotate: true
+  xy: 352, 9
+  size: 153, 156
+  orig: 153, 156
+  offset: 0, 0
+  index: -1
+green
+  rotate: false
+  xy: 2, 67
+  size: 348, 95
+  orig: 348, 95
+  offset: 0, 0
+  index: -1
+login
+  rotate: false
+  xy: 170, 32
+  size: 97, 33
+  orig: 97, 33
+  offset: 0, 0
+  index: -1
+purple
+  rotate: false
+  xy: 2, 183
+  size: 348, 177
+  orig: 348, 177
+  offset: 0, 0
+  index: -1
+yellow
+  rotate: false
+  xy: 352, 164
+  size: 308, 196
+  orig: 308, 196
+  offset: 0, 0
+  index: -1

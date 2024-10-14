@@ -1,0 +1,139 @@
+
+skeleton.png
+size: 408,1572
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: true
+  xy: 2, 874
+  size: 195, 377
+  orig: 195, 377
+  offset: 0, 0
+  index: -1
+blur
+  rotate: false
+  xy: 2, 147
+  size: 185, 145
+  orig: 185, 145
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 2, 1071
+  size: 387, 500
+  orig: 387, 518
+  offset: 0, 12
+  index: -1
+eye_close_left
+  rotate: false
+  xy: 2, 1274
+  size: 48, 33
+  orig: 49, 35
+  offset: 1, 1
+  index: -1
+eye_close_right
+  rotate: false
+  xy: 2, 1426
+  size: 33, 32
+  orig: 38, 35
+  offset: 3, 1
+  index: -1
+eye_left
+  rotate: false
+  xy: 2, 1548
+  size: 22, 21
+  orig: 22, 21
+  offset: 0, 0
+  index: -1
+eye_right
+  rotate: false
+  xy: 26, 1549
+  size: 19, 20
+  orig: 19, 20
+  offset: 0, 0
+  index: -1
+lacay
+  rotate: false
+  xy: 107, 244
+  size: 279, 256
+  orig: 279, 256
+  offset: 0, 0
+  index: -1
+longmat
+  rotate: false
+  xy: 271, 4
+  size: 126, 43
+  orig: 126, 43
+  offset: 0, 0
+  index: -1
+longmay
+  rotate: false
+  xy: 124, 11
+  size: 125, 25
+  orig: 125, 30
+  offset: 0, 0
+  index: -1
+ma
+  rotate: false
+  xy: 2, 1308
+  size: 58, 69
+  orig: 58, 69
+  offset: 0, 0
+  index: -1
+mai
+  rotate: false
+  xy: 2, 1168
+  size: 110, 202
+  orig: 110, 205
+  offset: 0, 3
+  index: -1
+moi
+  rotate: false
+  xy: 303, 1235
+  size: 83, 57
+  orig: 83, 57
+  offset: 0, 0
+  index: -1
+musau
+  rotate: false
+  xy: 2, 491
+  size: 310, 158
+  orig: 310, 158
+  offset: 0, 0
+  index: -1
+mutren
+  rotate: 270
+  xy: 232, 37
+  size: 310, 173
+  orig: 310, 173
+  offset: 0, 0
+  index: -1
+sau
+  rotate: false
+  xy: 2, 4
+  size: 181, 142
+  orig: 181, 153
+  offset: 0, 0
+  index: -1
+text
+  rotate: true
+  xy: 301, 1071
+  size: 162, 60
+  orig: 162, 60
+  offset: 0, 0
+  index: -1
+tocsau
+  rotate: true
+  xy: 2, 620
+  size: 252, 331
+  orig: 252, 331
+  offset: 0, 0
+  index: -1
+toctruoc
+  rotate: 180
+  xy: 281, 437
+  size: 117, 330
+  orig: 127, 340
+  offset: 1, 7
+  index: -1
