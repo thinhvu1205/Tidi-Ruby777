@@ -40,13 +40,13 @@ public class BinhGameView : GameView
     [SerializeField] private List<Vector2> m_CardsPosV2s;
     [SerializeField]
     private GameObject
-        m_Countdown, m_Cards, m_Cards1, m_Chips, m_TimeRemain, m_ScoreBg, m_SortCards, m_TextSpecial, m_Star, m_IconBomb;
+         m_Cards, m_Cards1, m_Chips, m_TimeRemain, m_ScoreBg, m_SortCards, m_TextSpecial, m_Star, m_IconBomb;
     [SerializeField] private Image m_BgTimeRemainImg, m_CheckHand1Img, m_CheckHand2Img, m_CheckHand3Img;
     [SerializeField] private Button m_RearrangeBtn, m_ShowCardsBtn, m_SwapHandsBtn, m_DeclareBtn;
     [SerializeField]
     private TextMeshProUGUI
         m_SpecialNameTMP, m_SortHand1TMP, m_SortHand2TMP, m_SortHand3TMP, m_Hand1TMP, m_Hand2TMP, m_Hand3TMP,
-        m_ScoreHand1TMP, m_ScoreHand2TMP, m_ScoreHand3TMP;
+        m_ScoreHand1TMP, m_ScoreHand2TMP, m_ScoreHand3TMP, m_Countdown;
     [SerializeField] private SkeletonGraphic m_StartSG, m_FinishSG, m_SpecialSG, m_EndSG, m_TankSG, m_BombSG;
     [SerializeField] private Avatar m_SpecialAvatarA;
     [SerializeField] private Card m_PrefabCardC;
@@ -69,7 +69,6 @@ public class BinhGameView : GameView
     private int index = 0;
     private float _ScreenLeftClamp, _ScreenRightClamp, _ScreenBotClamp, _ScreenTopClamp, _CardsCheckOffset, _TimeSapHam = 0;
     private bool _IsExit, _IsFinish, _CanClear = true, _IsJackPot, _CanSortCard;
-
     #region Button
     public void onClickRuleJP()
     {
@@ -143,6 +142,7 @@ public class BinhGameView : GameView
 
     public void ProcessResponseData(JObject jData)
     {
+        Debug.Log(jData.ToString());
         switch ((string)jData["evt"])
         {
             case "countdowntostart":
@@ -169,6 +169,7 @@ public class BinhGameView : GameView
     }
     public override void handleCTable(string objData)
     {
+       
         base.handleCTable(objData);
         JObject data = JObject.Parse(objData);
         JArray ArrP = getJArray(data, "ArrP");
@@ -278,16 +279,16 @@ public class BinhGameView : GameView
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.START_GAME);
         int timeStart = (int)data["data"];
         resetGameDisplay();
-        m_Countdown.SetActive(true);
-        m_Countdown.transform.GetComponentInChildren<TextMeshProUGUI>().text = timeStart.ToString();
+        m_Countdown.gameObject.SetActive(true);
+        m_Countdown.text = timeStart.ToString();
         DOTween.Sequence().AppendInterval(1.0f).AppendCallback(() =>
         {
             timeStart--;
             checkAutoExit();
-            m_Countdown.transform.GetComponentInChildren<TextMeshProUGUI>().text = timeStart + "";
+            m_Countdown.text = timeStart + "";
         }).SetLoops(timeStart).OnComplete(() =>
         {
-            m_Countdown.SetActive(false);
+            m_Countdown.gameObject.SetActive(false);
         });
         _TimeTMP.color = Color.green;
     }
@@ -604,11 +605,9 @@ public class BinhGameView : GameView
             var player = players[i];
             clearAllCard(player);
         }
-
+        TurnOff();
         for (int i = 0; i < 4; i++)
         {
-            m_SpecialRankImgs[i].gameObject.SetActive(false);
-            m_TotalPoints[i].SetActive(false);
             m_BurnedCardsSG[i].gameObject.SetActive(false);
             m_BurnedIcons[i].gameObject.SetActive(false);
         }
@@ -617,7 +616,14 @@ public class BinhGameView : GameView
         handleFinishGame();
     }
 
+    private void TurnOff(){
+        for (int i = 0; i < 4; i++)
+        {
+            m_SpecialRankImgs[i].gameObject.SetActive(false);
+            m_TotalPoints[i].SetActive(false);
+        }
 
+    }
 
     public void ViewIng(JObject dataGame)
     {
@@ -1306,15 +1312,8 @@ public class BinhGameView : GameView
                     });
                 });
             }
-
-            m_RankImgs[index].gameObject.SetActive(true);
-            m_RankImgs[index].transform.localPosition = posCard + new Vector2(0, 200);
-            m_RankImgs[index].sprite = m_RankImageSs[fileName];
-            m_RankImgs[index].SetNativeSize();
-            m_RankImgs[index].transform.DOScale(1f, 0.01f).SetDelay(2.5f).OnComplete(() =>
-            {
-                m_RankImgs[index].gameObject.SetActive(false);
-            });
+             m_RankImgs[index].transform.localPosition = posCard + new Vector2(0, 200);
+             RankImage(index,fileName);
         }
         await Task.Delay(2500);
         for (var i = 0; i < players.Count; i++)
@@ -1331,7 +1330,16 @@ public class BinhGameView : GameView
             setPointTotal(player, index);
         }
     }
+    private void RankImage(int index,int fileName){
 
+            m_RankImgs[index].gameObject.SetActive(true);
+            m_RankImgs[index].sprite = m_RankImageSs[fileName];
+            m_RankImgs[index].SetNativeSize();
+            m_RankImgs[index].transform.DOScale(1, 0.01f).SetDelay(2.5f).OnComplete(() =>
+            {
+                m_RankImgs[index].gameObject.SetActive(false);
+            });
+    }
     async void showChi3()
     {
         m_SpecialSG.transform.parent.gameObject.SetActive(false);
@@ -1388,14 +1396,8 @@ public class BinhGameView : GameView
                 });
             }
 
-            m_RankImgs[index].gameObject.SetActive(true);
             m_RankImgs[index].transform.localPosition = posCard + new Vector2(0, 150);
-            m_RankImgs[index].sprite = m_RankImageSs[fileName];
-            m_RankImgs[index].SetNativeSize();
-            m_RankImgs[index].transform.DOScale(1f, 0.01f).SetDelay(2.5f).OnComplete(() =>
-            {
-                m_RankImgs[index].gameObject.SetActive(false);
-            });
+            RankImage(index,fileName);
         }
         await Task.Delay(2500);
         for (var i = 0; i < players.Count; i++)
@@ -1414,8 +1416,8 @@ public class BinhGameView : GameView
     }
     private IEnumerator _ShowRankImage(int idPlayer, Vector2 positionV2, int idRankSpr)
     {
-        m_RankImgs[idPlayer].gameObject.SetActive(true);
         m_RankImgs[idPlayer].transform.localPosition = positionV2;
+        m_RankImgs[idPlayer].gameObject.SetActive(true);
         m_RankImgs[idPlayer].sprite = m_RankImageSs[idRankSpr];
         m_RankImgs[idPlayer].SetNativeSize();
         m_RankImgs[idPlayer].transform.localScale = Vector2.one;
@@ -1843,11 +1845,7 @@ public class BinhGameView : GameView
 
     public void cleanTable()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            m_SpecialRankImgs[i].gameObject.SetActive(false);
-            m_TotalPoints[i].gameObject.SetActive(false);
-        }
+       TurnOff();
         m_ScoreBg.SetActive(false);
         m_ScoreHand1TMP.gameObject.SetActive(false);
         m_ScoreHand2TMP.gameObject.SetActive(false);
@@ -1996,11 +1994,7 @@ public class BinhGameView : GameView
         {
             await Task.Delay(4000);
         }
-        for (int i = 0; i < 4; i++)
-        {
-            m_SpecialRankImgs[i].gameObject.SetActive(false);
-            m_TotalPoints[i].gameObject.SetActive(false);
-        }
+       TurnOff();
         await Task.Delay(1000);
         for (var i = 0; i < players.Count; i++)
         {
