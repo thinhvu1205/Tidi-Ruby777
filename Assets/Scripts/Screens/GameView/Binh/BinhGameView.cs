@@ -40,13 +40,15 @@ public class BinhGameView : GameView
     [SerializeField] private List<SkeletonGraphic> m_BurnedCardsSG;
     [SerializeField] private List<Vector2> m_CardsPosV2s;
 
-    [SerializeField] private GameObject
+    [SerializeField]
+    private GameObject
         m_Cards, m_Cards1, m_Chips, m_TimeRemain, m_ScoreBg, m_SortCards, m_TextSpecial, m_Star, m_IconBomb;
 
     [SerializeField] private Image m_BgTimeRemainImg, m_CheckHand1Img, m_CheckHand2Img, m_CheckHand3Img;
     [SerializeField] private Button m_RearrangeBtn, m_ShowCardsBtn, m_SwapHandsBtn, m_DeclareBtn;
 
-    [SerializeField] private TextMeshProUGUI
+    [SerializeField]
+    private TextMeshProUGUI
         m_SpecialNameTMP,
         m_SortHand1TMP,
         m_SortHand2TMP,
@@ -313,6 +315,7 @@ public class BinhGameView : GameView
 
     private void _HandleCountdownToStart(JObject data)
     {
+        Debug.LogError($"Data_HandleCountdownToStart {data.ToString()}");
         cleanTable();
         for (var i = 0; i < players.Count; i++)
         {
@@ -337,6 +340,7 @@ public class BinhGameView : GameView
 
     private async void _HandleLC(JObject data)
     {
+        Debug.LogError($"Data_HandleLC {data.ToString()}");
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.START_GAME);
         updatePositionPlayerView();
         m_StartSG.gameObject.SetActive(true);
@@ -387,6 +391,7 @@ public class BinhGameView : GameView
 
     private void _HandleDeclare(JObject data)
     {
+        Debug.LogError($"Data__HandleDeclare {data.ToString()}");
         Player player = getPlayer(getString(data, "Name"));
         if (player == thisPlayer)
         {
@@ -398,6 +403,7 @@ public class BinhGameView : GameView
 
     private void _HandleCompareHands(JObject data)
     {
+        Debug.LogError($"Data_HandleCompareHands {data.ToString()}");
         string name = getString(data, "Name");
         var player = getPlayer(name);
         if (player != thisPlayer)
@@ -427,6 +433,7 @@ public class BinhGameView : GameView
 
     private void _HandleReshuffle(JObject data)
     {
+        Debug.LogError($"Data_HandleReshuffle {data.ToString()}");
         string name = getString(data, "Name");
         Player player = getPlayer(name);
         if (player != thisPlayer)
@@ -445,6 +452,7 @@ public class BinhGameView : GameView
 
     private async void _HandleFinishGame(JObject data)
     {
+        Debug.LogError($"Data_HandleFinishGame {data.ToString()}");
         _IsExit = true;
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.ALERT);
         if (m_SortCards.activeSelf)
@@ -579,6 +587,18 @@ public class BinhGameView : GameView
             }
 
             await Task.Delay(2000);
+        }
+        //TODO all user Burned
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (!m_BurnedIcons[i].activeSelf)
+            {
+
+            }
+            else
+            {
+                Debug.LogError($"All User Burned");
+            }
         }
         if (num > 1)
         {
@@ -853,7 +873,7 @@ public class BinhGameView : GameView
                             break;
                         }
                     }
-
+                    //TODO: chay anim ten lua
                     if (!player1.isSapLang)
                     {
                         player.totalPoint += point;
@@ -1104,9 +1124,9 @@ public class BinhGameView : GameView
         }
 
         var idexPos = getDynamicIndex(getIndexOf(player));
-
         if (player.mauBinh_BL)
         {
+            //TODO Burned
             SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.CLOCK_TICK);
             m_BurnedCardsSG[idexPos].gameObject.SetActive(true);
             m_BurnedCardsSG[idexPos].Initialize(true);
@@ -1343,10 +1363,10 @@ public class BinhGameView : GameView
                 zIndexArr[j - 3] = player.vectorCard[j].transform.GetSiblingIndex();
             }
 
-            for (var j = 0; j < player.vectorChi2.Count; j++) //todo:PT10
+            for (var j = 0; j < player.vectorChi3.Count; j++) //todo:PT10
             {
-                player.vectorChi2[j].setDark(true);
-                player.vectorChi2[j].transform.SetSiblingIndex(zIndexArr[j]);
+                player.vectorChi3[j].setDark(true);
+                player.vectorChi3[j].transform.SetSiblingIndex(zIndexArr[j]);
             }
 
             for (var j = 0; j < player.vectorChi2.Count; j++)
