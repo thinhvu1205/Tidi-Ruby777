@@ -32,21 +32,33 @@ public class BinhGameView : GameView
         DRAGON,
         GRAND_DRAGON
     }
+
     [SerializeField] private List<GameObject> m_TotalPoints, m_BurnedIcons;
     [SerializeField] private List<Image> m_RankImgs, m_SpecialRankImgs, m_HandImgs, m_HintRankImgs;
     [SerializeField] private List<TextMeshProUGUI> m_JackPotNumberTMPs;
     [SerializeField] private List<Sprite> m_RankImageSs, m_CheckIconSs, m_HandBgSs, m_ButtonSs;
     [SerializeField] private List<SkeletonGraphic> m_BurnedCardsSG;
     [SerializeField] private List<Vector2> m_CardsPosV2s;
-    [SerializeField]
-    private GameObject
-         m_Cards, m_Cards1, m_Chips, m_TimeRemain, m_ScoreBg, m_SortCards, m_TextSpecial, m_Star, m_IconBomb;
+
+    [SerializeField] private GameObject
+        m_Cards, m_Cards1, m_Chips, m_TimeRemain, m_ScoreBg, m_SortCards, m_TextSpecial, m_Star, m_IconBomb;
+
     [SerializeField] private Image m_BgTimeRemainImg, m_CheckHand1Img, m_CheckHand2Img, m_CheckHand3Img;
     [SerializeField] private Button m_RearrangeBtn, m_ShowCardsBtn, m_SwapHandsBtn, m_DeclareBtn;
-    [SerializeField]
-    private TextMeshProUGUI
-        m_SpecialNameTMP, m_SortHand1TMP, m_SortHand2TMP, m_SortHand3TMP, m_Hand1TMP, m_Hand2TMP, m_Hand3TMP,
-        m_ScoreHand1TMP, m_ScoreHand2TMP, m_ScoreHand3TMP, m_Countdown;
+
+    [SerializeField] private TextMeshProUGUI
+        m_SpecialNameTMP,
+        m_SortHand1TMP,
+        m_SortHand2TMP,
+        m_SortHand3TMP,
+        m_Hand1TMP,
+        m_Hand2TMP,
+        m_Hand3TMP,
+        m_ScoreHand1TMP,
+        m_ScoreHand2TMP,
+        m_ScoreHand3TMP,
+        m_Countdown;
+
     [SerializeField] private SkeletonGraphic m_StartSG, m_FinishSG, m_SpecialSG, m_EndSG, m_TankSG, m_BombSG;
     [SerializeField] private Avatar m_SpecialAvatarA;
     [SerializeField] private Card m_PrefabCardC;
@@ -63,17 +75,29 @@ public class BinhGameView : GameView
     private BinhLogicManager _LogicManagerBLM = new();
     private JArray _DataFinishJA = new();
     private Vector2 _CardsCenterV2;
+
     private TextMeshProUGUI _TimeTMP;
+
     //List<Card> listCardInTable = new();
     private int[] _StateButtonIds = new int[5];
     private int index = 0;
-    private float _ScreenLeftClamp, _ScreenRightClamp, _ScreenBotClamp, _ScreenTopClamp, _CardsCheckOffset, _TimeSapHam = 0;
+
+    private float _ScreenLeftClamp,
+        _ScreenRightClamp,
+        _ScreenBotClamp,
+        _ScreenTopClamp,
+        _CardsCheckOffset,
+        _TimeSapHam = 0;
+
     private bool _IsExit, _IsFinish, _CanClear = true, _IsJackPot, _CanSortCard;
+
     #region Button
+
     public void onClickRuleJP()
     {
         UIManager.instance.openRuleJPBinh();
     }
+
     public void onClickShowCard()
     {
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.CLICK);
@@ -85,9 +109,11 @@ public class BinhGameView : GameView
         {
             vtCard.Add(thisPlayer.vectorCard[i].code);
         }
+
         // showStar
         SocketSend.sendBinhShowCard(vtCard, _IsExit);
     }
+
     public void onClickDoiChi()
     {
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.CLICK);
@@ -113,6 +139,7 @@ public class BinhGameView : GameView
         splitChi(thisPlayer);
         updateTextBinh();
     }
+
     public void onClickHint(string customEventData)
     {
         int index = int.Parse(customEventData);
@@ -120,6 +147,7 @@ public class BinhGameView : GameView
         showIcStar(true, index);
         showStar(_HintRankCs[index]);
     }
+
     public void onClickDeclare()
     {
         _IsExit = false;
@@ -130,14 +158,17 @@ public class BinhGameView : GameView
         {
             vtCard.Add(thisPlayer.vectorCard[i].code);
         }
+
         SocketSend.sendBinhDeclare(vtCard, _IsExit);
     }
+
     public void onClickXepLai()
     {
         _IsExit = false;
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.CLICK);
         SocketSend.sendBinhXepLai();
     }
+
     #endregion
 
     public void ProcessResponseData(JObject jData)
@@ -167,9 +198,9 @@ public class BinhGameView : GameView
                 break;
         }
     }
+
     public override void handleCTable(string objData)
     {
-       
         base.handleCTable(objData);
         JObject data = JObject.Parse(objData);
         JArray ArrP = getJArray(data, "ArrP");
@@ -177,16 +208,19 @@ public class BinhGameView : GameView
         {
             _ScoreBonus = getListInt(data, "bonusScore");
         }
+
         if (data["instantWin"] != null)
         {
             _InstantWin = getListInt(data, "instantWin");
         }
+
         if (data["result"] != null)
         {
             _IsFinish = true;
             ViewIng((JObject)data["result"]);
         }
     }
+
     public override void handleSTable(string objData)
     {
         resetGameDisplay();
@@ -197,16 +231,19 @@ public class BinhGameView : GameView
         {
             _ScoreBonus = getListInt(data, "bonusScore");
         }
+
         if (data["instantWin"] != null)
         {
             _InstantWin = getListInt(data, "instantWin");
         }
+
         if (data["result"] != null)
         {
             _IsFinish = true;
             ViewIng((JObject)data["result"]);
         }
     }
+
     public override void handleVTable(string objData)
     {
         base.handleVTable(objData);
@@ -218,10 +255,12 @@ public class BinhGameView : GameView
         {
             _ScoreBonus = getListInt(data, "bonusScore");
         }
+
         if (data["instantWin"] != null)
         {
             _InstantWin = getListInt(data, "instantWin");
         }
+
         if (data["result"] != null)
         {
             _IsFinish = true;
@@ -234,6 +273,7 @@ public class BinhGameView : GameView
             _IsFinish = false;
         }
     }
+
     public override void handleRJTable(string objData)
     {
         base.handleRJTable(objData);
@@ -245,10 +285,12 @@ public class BinhGameView : GameView
         {
             _ScoreBonus = getListInt(data, "bonusScore");
         }
+
         if (data["instantWin"] != null)
         {
             _InstantWin = getListInt(data, "instantWin");
         }
+
         if (data["result"] != null)
         {
             _IsFinish = true;
@@ -261,12 +303,14 @@ public class BinhGameView : GameView
             _IsFinish = false;
         }
     }
+
     public override void handleFinishGame()
     {
         base.handleFinishGame();
         HandleGame.nextEvt();
         checkAutoExit();
     }
+
     private void _HandleCountdownToStart(JObject data)
     {
         cleanTable();
@@ -274,6 +318,7 @@ public class BinhGameView : GameView
         {
             clearAllCard(players[i]);
         }
+
         _CanClear = false;
         stateGame = Globals.STATE_GAME.WAITING;
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.START_GAME);
@@ -286,12 +331,10 @@ public class BinhGameView : GameView
             timeStart--;
             checkAutoExit();
             m_Countdown.text = timeStart + "";
-        }).SetLoops(timeStart).OnComplete(() =>
-        {
-            m_Countdown.gameObject.SetActive(false);
-        });
+        }).SetLoops(timeStart).OnComplete(() => { m_Countdown.gameObject.SetActive(false); });
         _TimeTMP.color = Color.green;
     }
+
     private async void _HandleLC(JObject data)
     {
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.START_GAME);
@@ -299,10 +342,7 @@ public class BinhGameView : GameView
         m_StartSG.gameObject.SetActive(true);
         m_StartSG.AnimationState.SetAnimation(0, "start", false);
         m_StartSG.Initialize(true);
-        m_StartSG.AnimationState.Complete += delegate
-        {
-            m_StartSG.gameObject.SetActive(false);
-        };
+        m_StartSG.AnimationState.Complete += delegate { m_StartSG.gameObject.SetActive(false); };
         stateGame = Globals.STATE_GAME.PLAYING;
         _IsFinish = false;
         int time = (int)data["T"];
@@ -333,15 +373,18 @@ public class BinhGameView : GameView
                     card.setTextureWithCode(arr[j]);
                 }
                 else card.setTextureWithCode(0);
+
                 player.vectorCard.Add(card);
             }
         }
+
         await Task.Delay(1500);
         chiabai();
         countDown(time - 4);
         await Task.Delay(1000);
         initSortLayer();
     }
+
     private void _HandleDeclare(JObject data)
     {
         Player player = getPlayer(getString(data, "Name"));
@@ -352,6 +395,7 @@ public class BinhGameView : GameView
             hideSortLayer();
         }
     }
+
     private void _HandleCompareHands(JObject data)
     {
         string name = getString(data, "Name");
@@ -366,6 +410,7 @@ public class BinhGameView : GameView
                     card.transform.DOScale(SCALE_CARD, 0.3f).SetEase(Ease.InOutSine);
                 });
             }
+
             player.mauBinhSoBai = true;
             var index = getDynamicIndex(getIndexOf(player));
             m_RankImgs[index].gameObject.SetActive(true);
@@ -379,6 +424,7 @@ public class BinhGameView : GameView
             hideSortLayer();
         }
     }
+
     private void _HandleReshuffle(JObject data)
     {
         string name = getString(data, "Name");
@@ -396,6 +442,7 @@ public class BinhGameView : GameView
             initSortLayer();
         }
     }
+
     private async void _HandleFinishGame(JObject data)
     {
         _IsExit = true;
@@ -408,10 +455,7 @@ public class BinhGameView : GameView
         m_FinishSG.gameObject.SetActive(true);
         m_FinishSG.AnimationState.SetAnimation(0, "compare", false);
         m_FinishSG.Initialize(true);
-        m_FinishSG.AnimationState.Complete += delegate
-        {
-            m_FinishSG.gameObject.SetActive(false);
-        };
+        m_FinishSG.AnimationState.Complete += delegate { m_FinishSG.gameObject.SetActive(false); };
         for (var i = 0; i < 4; i++)
             m_RankImgs[i].gameObject.SetActive(false);
         JArray listPl = JArray.Parse(getString(data, "data"));
@@ -476,6 +520,7 @@ public class BinhGameView : GameView
                 });
             }
         }
+
         for (var i = 0; i < players.Count; i++)
         {
             var player = players[i];
@@ -507,6 +552,7 @@ public class BinhGameView : GameView
                     showCardSpecial(player);
                 }
             }
+
             if (thisPlayer.mauBinh_MB > 0)
                 showAnimationSpecialFull();
             await Task.Delay(2000);
@@ -531,6 +577,7 @@ public class BinhGameView : GameView
                     card.setTextureWithCode(card.encodeCard());
                 }
             }
+
             await Task.Delay(2000);
         }
 
@@ -546,6 +593,7 @@ public class BinhGameView : GameView
                 m_RankImgs[i].gameObject.SetActive(false);
             await Task.Delay(2000);
         }
+
         doEndGameFlow();
     }
 
@@ -598,6 +646,7 @@ public class BinhGameView : GameView
 
         node.transform.localScale = initialScale;
     }
+
     void resetGameDisplay()
     {
         for (int i = 0; i < players.Count; i++)
@@ -605,6 +654,7 @@ public class BinhGameView : GameView
             var player = players[i];
             clearAllCard(player);
         }
+
         TurnOff();
         for (int i = 0; i < 4; i++)
         {
@@ -616,13 +666,13 @@ public class BinhGameView : GameView
         handleFinishGame();
     }
 
-    private void TurnOff(){
+    private void TurnOff()
+    {
         for (int i = 0; i < 4; i++)
         {
             m_SpecialRankImgs[i].gameObject.SetActive(false);
             m_TotalPoints[i].SetActive(false);
         }
-
     }
 
     public void ViewIng(JObject dataGame)
@@ -667,9 +717,10 @@ public class BinhGameView : GameView
         for (var i = 0; i < players.Count; i++)
         {
             var player = players[i];
-            var firstTotalPoint = player.scoreChi1 + player.scoreChi2 + player.scoreChi3 + player.bonusChi1 + player.bonusChi2 + player.bonusChi3;
+            var firstTotalPoint = player.scoreChi1 + player.scoreChi2 + player.scoreChi3 + player.bonusChi1 +
+                                  player.bonusChi2 + player.bonusChi3;
             player.totalPoint += firstTotalPoint;
-
+            Debug.LogError($"ShowPoint:{player.totalPoint}");
             if (player == thisPlayer && stateGame == Globals.STATE_GAME.VIEWING)
                 continue;
 
@@ -687,18 +738,23 @@ public class BinhGameView : GameView
                         break;
                     }
                 }
+
                 player.totalPoint += point;
                 player1.totalPoint -= point;
+                Debug.LogError($"ShowPoint:{player.totalPoint}");
             }
         }
+
         for (var i = 0; i < players.Count; i++)
         {
             var player = players[i];
             setPointTotal(player, getDynamicIndex(getIndexOf(player)));
         }
+
         initPlayerCard();
         showExchangeMoney();
     }
+
     public void chiabai()
     {
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.CARD_FLIP_1);
@@ -715,8 +771,10 @@ public class BinhGameView : GameView
                 card.transform.DORotate(newRotation.eulerAngles, 0.3f).SetEase(Ease.InOutSine);
             }
         }
+
         splitChi(thisPlayer);
     }
+
     public int checkWinAll()
     {
         if (players.Count <= 3 && stateGame == Globals.STATE_GAME.VIEWING)
@@ -751,6 +809,7 @@ public class BinhGameView : GameView
                     }
                 }
             }
+
             player.isSapLang = checkHaveArrWin && data.Count == szSapLang;
         }
 
@@ -774,10 +833,10 @@ public class BinhGameView : GameView
                     else continue;
                 }
             }
+
             if (data == null)
                 continue;
-            else
-                if (data.Count == szSapLang)
+            else if (data.Count == szSapLang)
             {
                 foreach (var player1 in players)
                 {
@@ -802,7 +861,7 @@ public class BinhGameView : GameView
                     {
                         player.totalPoint += point;
                         player1.totalPoint -= point;
-
+                        Debug.LogError($"ShowPoint:{player.totalPoint}");
                         int fromPos = getDynamicIndex(getIndexOf(player));
                         int toPos = getDynamicIndex(getIndexOf(player1));
 
@@ -815,10 +874,7 @@ public class BinhGameView : GameView
                         animation.transform.localPosition = m_CardsPosV2s[toPos] + positionOffset;
                         animation.Initialize(true);
                         animation.AnimationState.SetAnimation(0, "animation", false);
-                        animation.AnimationState.Complete += delegate
-                        {
-                            Destroy(animation.gameObject);
-                        };
+                        animation.AnimationState.Complete += delegate { Destroy(animation.gameObject); };
                         time = 3000;
                     }
                 }
@@ -879,6 +935,7 @@ public class BinhGameView : GameView
                 _TimeSapHam += effectTime;
             }
         }
+
         await Task.Delay(500);
         _CanClear = true;
     }
@@ -900,36 +957,60 @@ public class BinhGameView : GameView
             {
                 switch (toPos)
                 {
-                    case 3: anim = "A1"; break;
-                    case 2: anim = "A2"; break;
-                    case 1: anim = "A3"; break;
+                    case 3:
+                        anim = "A1";
+                        break;
+                    case 2:
+                        anim = "A2";
+                        break;
+                    case 1:
+                        anim = "A3";
+                        break;
                 }
             }
             else if (fromPos == 1)
             {
                 switch (toPos)
                 {
-                    case 0: anim = "D4"; break;
-                    case 3: anim = "D5"; break;
-                    case 2: anim = "D6"; break;
+                    case 0:
+                        anim = "D4";
+                        break;
+                    case 3:
+                        anim = "D5";
+                        break;
+                    case 2:
+                        anim = "D6";
+                        break;
                 }
             }
             else if (fromPos == 2)
             {
                 switch (toPos)
                 {
-                    case 0: anim = "A2"; break;
-                    case 1: anim = "A1"; break;
-                    case 3: anim = "A3"; break;
+                    case 0:
+                        anim = "A2";
+                        break;
+                    case 1:
+                        anim = "A1";
+                        break;
+                    case 3:
+                        anim = "A3";
+                        break;
                 }
             }
             else if (fromPos == 3)
             {
                 switch (toPos)
                 {
-                    case 0: anim = "D6"; break;
-                    case 1: anim = "D5"; break;
-                    case 2: anim = "D4"; break;
+                    case 0:
+                        anim = "D6";
+                        break;
+                    case 1:
+                        anim = "D5";
+                        break;
+                    case 2:
+                        anim = "D4";
+                        break;
                 }
             }
 
@@ -945,10 +1026,7 @@ public class BinhGameView : GameView
                 animation.transform.localRotation = newRotation;
             animation.Initialize(true);
             animation.AnimationState.SetAnimation(0, anim, false);
-            animation.AnimationState.Complete += delegate
-            {
-                StartCoroutine(turnOffAnimTank(2f, animation));
-            };
+            animation.AnimationState.Complete += delegate { StartCoroutine(turnOffAnimTank(2f, animation)); };
             await Task.Delay(1000);
             createBomEffect(shotPlayer, player);
         }
@@ -970,10 +1048,7 @@ public class BinhGameView : GameView
 
         var spBom = Instantiate(m_IconBomb, transform);
         spBom.transform.localPosition = posTank;
-        spBom.transform.DOMove(posBom, 0.5f).SetEase(Ease.InOutCubic).OnComplete(() =>
-        {
-            Destroy(spBom);
-        });
+        spBom.transform.DOMove(posBom, 0.5f).SetEase(Ease.InOutCubic).OnComplete(() => { Destroy(spBom); });
 
         SkeletonGraphic anim = Instantiate(m_BombSG, transform);
         anim.gameObject.SetActive(true);
@@ -981,10 +1056,7 @@ public class BinhGameView : GameView
         await Task.Delay(300);
         anim.Initialize(true);
         anim.AnimationState.SetAnimation(0, "animation", false);
-        anim.AnimationState.Complete += delegate
-        {
-            StartCoroutine(turnOffAnimBom(0.7f, anim));
-        };
+        anim.AnimationState.Complete += delegate { StartCoroutine(turnOffAnimBom(0.7f, anim)); };
 
 
         SoundManager.instance.playEffectFromPath(Globals.SOUND_CHAT.BOOM);
@@ -1005,15 +1077,15 @@ public class BinhGameView : GameView
                 {
                     point = 0;
                 }
+
                 break;
             }
             else continue;
         }
 
-
         shotPlayer.totalPoint += point;
         player.totalPoint -= point;
-
+        Debug.LogError($"ShowPoint:{player.totalPoint}");
         setPointTotal(shotPlayer, fromPos, true);
         setPointTotal(player, toPos, true);
     }
@@ -1033,7 +1105,6 @@ public class BinhGameView : GameView
             card.transform.DOScale(new Vector2(0, SCALE_CARD), 0.05f).SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 card.transform.DOScale(new Vector2(SCALE_CARD, SCALE_CARD), 0.15f).SetEase(Ease.InOutSine);
-
             });
         }
 
@@ -1047,7 +1118,6 @@ public class BinhGameView : GameView
             m_BurnedCardsSG[idexPos].AnimationState.SetAnimation(0, "animation", false);
             m_BurnedCardsSG[idexPos].AnimationState.Complete += delegate
             {
-
                 m_BurnedCardsSG[idexPos].gameObject.SetActive(false);
                 m_BurnedIcons[idexPos].SetActive(true);
                 //listTotalPoint[idexPos].SetActive(false);
@@ -1100,18 +1170,21 @@ public class BinhGameView : GameView
                         {
                             player.totalPoint += point;
                             curPlayer.totalPoint -= point;
+                            Debug.LogError($"ShowPoint:{player.totalPoint}");
                         }
                     }
                     else
                     {
                         player.totalPoint += point;
                         curPlayer.totalPoint -= point;
+                        Debug.LogError($"ShowPoint:{player.totalPoint}");
                     }
 
                     setPointTotal(player, pos1);
                     setPointTotal(curPlayer, pos2);
                 }
             }
+
             if (path >= 0)
             {
                 m_SpecialRankImgs[pos1].gameObject.SetActive(true);
@@ -1146,8 +1219,8 @@ public class BinhGameView : GameView
             m_SpecialSG.transform.parent.gameObject.SetActive(false);
         };
         m_SpecialNameTMP.text = thisPlayer.displayName.Length > 20
-    ? thisPlayer.displayName.Substring(0, 20) + "..."
-    : thisPlayer.displayName;
+            ? thisPlayer.displayName.Substring(0, 20) + "..."
+            : thisPlayer.displayName;
     }
 
     async void showChi1()
@@ -1169,7 +1242,7 @@ public class BinhGameView : GameView
                 continue;
 
             player.totalPoint += player.scoreChi1 + player.bonusChi1;
-
+            Debug.LogError($"ShowPoint:{player.totalPoint}");
             if (player.scoreChi1 + player.bonusChi1 > 0)
                 isBest = true;
             else
@@ -1218,15 +1291,10 @@ public class BinhGameView : GameView
                 });
             }
 
-            m_RankImgs[index].gameObject.SetActive(true);
             m_RankImgs[index].transform.localPosition = posCard + new Vector2(0, 80);
-            m_RankImgs[index].sprite = m_RankImageSs[fileName];
-            m_RankImgs[index].SetNativeSize();
-            m_RankImgs[index].transform.DOScale(1f, 0.01f).SetDelay(2.5f).OnComplete(() =>
-            {
-                m_RankImgs[index].gameObject.SetActive(false);
-            });
+            RankImage(this.index, fileName);
         }
+
         await Task.Delay(2500);
         for (var i = 0; i < players.Count; i++)
         {
@@ -1264,7 +1332,7 @@ public class BinhGameView : GameView
                 continue;
 
             player.totalPoint += player.scoreChi2 + player.bonusChi2;
-
+            Debug.LogError($"ShowPoint:{player.totalPoint}");
             if (player.scoreChi2 + player.bonusChi2 > 0)
                 isBest = true;
             else
@@ -1284,10 +1352,10 @@ public class BinhGameView : GameView
                 zIndexArr[j - 3] = player.vectorCard[j].transform.GetSiblingIndex();
             }
 
-            for (var j = 0; j < player.vectorChi3.Count; j++)
+            for (var j = 0; j < player.vectorChi2.Count; j++) //todo:PT10
             {
-                player.vectorChi3[j].setDark(true);
-                player.vectorChi3[j].transform.SetSiblingIndex(zIndexArr[j]);
+                player.vectorChi2[j].setDark(true);
+                player.vectorChi2[j].transform.SetSiblingIndex(zIndexArr[j]);
             }
 
             for (var j = 0; j < player.vectorChi2.Count; j++)
@@ -1305,16 +1373,18 @@ public class BinhGameView : GameView
                     card.transform.DORotate(newRotation.eulerAngles, 0.2f).SetDelay(2f);
                     card.transform.DOLocalMove(pos1, 0.2f).SetEase(Ease.InOutCubic).SetDelay(2f).OnComplete(() =>
                     {
-                        for (var j = 3; j < 13; j++)
+                        for (int j = 3; j < 13; j++)
                         {
                             player.vectorCard[j].transform.SetSiblingIndex(zIndexArr[j - 3]);
                         }
                     });
                 });
             }
-             m_RankImgs[index].transform.localPosition = posCard + new Vector2(0, 200);
-             RankImage(index,fileName);
+
+            m_RankImgs[index].transform.localPosition = posCard + new Vector2(0, 200);
+            RankImage(index, fileName);
         }
+
         await Task.Delay(2500);
         for (var i = 0; i < players.Count; i++)
         {
@@ -1330,16 +1400,18 @@ public class BinhGameView : GameView
             setPointTotal(player, index);
         }
     }
-    private void RankImage(int index,int fileName){
 
-            m_RankImgs[index].gameObject.SetActive(true);
-            m_RankImgs[index].sprite = m_RankImageSs[fileName];
-            m_RankImgs[index].SetNativeSize();
-            m_RankImgs[index].transform.DOScale(1, 0.01f).SetDelay(2.5f).OnComplete(() =>
-            {
-                m_RankImgs[index].gameObject.SetActive(false);
-            });
+    private void RankImage(int index, int fileName)
+    {
+        m_RankImgs[index].gameObject.SetActive(true);
+        m_RankImgs[index].sprite = m_RankImageSs[fileName];
+        m_RankImgs[index].SetNativeSize();
+        m_RankImgs[index].transform.DOScale(1, 0.01f).SetDelay(2.5f).OnComplete(() =>
+        {
+            m_RankImgs[index].gameObject.SetActive(false);
+        });
     }
+
     async void showChi3()
     {
         m_SpecialSG.transform.parent.gameObject.SetActive(false);
@@ -1355,7 +1427,6 @@ public class BinhGameView : GameView
             m_ScoreBg.SetActive(false);
         else
             m_ScoreBg.SetActive(true);
-
         for (int i = 0; i < players.Count; i++)
         {
             Player player = players[i];
@@ -1365,9 +1436,9 @@ public class BinhGameView : GameView
             if (player.mauBinh_BL || player.mauBinh_MB > 0)
                 continue;
 
-            player.totalPoint += player.scoreChi3 + player.bonusChi3;
-
-            if (player.scoreChi3 + player.bonusChi3 > 0)
+            player.totalPoint += player.scoreChi3 + player.scoreChi3;
+            Debug.LogError($"ShowPoint:{player.totalPoint}");
+            if (player.scoreChi3 + player.scoreChi3 > 0)
                 isBest = true;
             else
                 isBest = false;
@@ -1397,8 +1468,9 @@ public class BinhGameView : GameView
             }
 
             m_RankImgs[index].transform.localPosition = posCard + new Vector2(0, 150);
-            RankImage(index,fileName);
+            RankImage(index, fileName);
         }
+
         await Task.Delay(2500);
         for (var i = 0; i < players.Count; i++)
         {
@@ -1414,6 +1486,7 @@ public class BinhGameView : GameView
             setPointTotal(player, index);
         }
     }
+
     private IEnumerator _ShowRankImage(int idPlayer, Vector2 positionV2, int idRankSpr)
     {
         m_RankImgs[idPlayer].transform.localPosition = positionV2;
@@ -1457,10 +1530,15 @@ public class BinhGameView : GameView
             case (int)TYPE_CARD_MAU_BINH.STRAIGHT_FLUSH:
                 fileName = 18;
                 break;
+            case (int)TYPE_CARD_MAU_BINH.THREE_FLUSHES: //todo:PT10
+                fileName = 20;
+                break;
         }
+
         if (!isBest) fileName++;
         return fileName;
     }
+
     public void initSortLayer()
     {
         _CanSortCard = true;
@@ -1483,8 +1561,8 @@ public class BinhGameView : GameView
                 m_RankImgs[index].sprite = m_RankImageSs[0];
                 m_RankImgs[index].SetNativeSize();
             }
-
         }
+
         for (var i = 0; i < thisPlayer.vectorCard.Count; i++)
         {
             var pos = getPositionSortCard(i);
@@ -1497,6 +1575,7 @@ public class BinhGameView : GameView
             card.transform.DOScale(ORG_CARD, 0.2f).SetEase(Ease.InOutSine);
             // card.setListenerDragDrop(OnBeginDrag, OnDrag, OnEndDrag, OnClick);
         }
+
         m_ChosenCardsBCGC.gameObject.SetActive(true);
         m_ChosenCardsBCGC.transform.SetAsLastSibling();
     }
@@ -1519,9 +1598,11 @@ public class BinhGameView : GameView
             card.transform.DOScale(SCALE_CARD, 0.1f).SetEase(Ease.InOutSine);
             // card.removeAllListenerDragDrop();
         }
+
         m_ChosenCardsBCGC.gameObject.SetActive(false);
         // resetColorCardChi();
     }
+
     public List<Card> sortChi(List<Card> vectorCard)
     {
         List<Card> vtCardChi1 = new();
@@ -1548,6 +1629,7 @@ public class BinhGameView : GameView
             rankchi = "listDoi";
             vtCardChi1 = listDoi(vtCardChi1);
         }
+
         Debug.Log("sort chi 1 " + rankchi);
 
         if (_LogicManagerBLM.checkThungPhaSanh(vtCardChi2))
@@ -1590,6 +1672,7 @@ public class BinhGameView : GameView
             rankchi = "listDoi";
             vtCardChi2 = listDoi(vtCardChi2);
         }
+
         Debug.Log("sort chi 2 " + rankchi);
 
         if (_LogicManagerBLM.checkThungPhaSanh(vtCardChi3))
@@ -1632,6 +1715,7 @@ public class BinhGameView : GameView
             rankchi = "listDoi";
             vtCardChi3 = listDoi(vtCardChi3);
         }
+
         Debug.Log("sort chi 3 " + rankchi);
 
         List<Card> vectorCardResult = new(vtCardChi1.Concat(vtCardChi2).Concat(vtCardChi3));
@@ -1639,6 +1723,7 @@ public class BinhGameView : GameView
         {
             vectorCardResult[i].transform.SetSiblingIndex(zIndexArr[i]);
         }
+
         return vectorCardResult;
     }
 
@@ -1753,12 +1838,14 @@ public class BinhGameView : GameView
             {
                 sanh.Add(list[j]);
             }
+
             sanh.Add(card2);
         }
         else
         {
             sanh.AddRange(list);
         }
+
         return sanh;
     }
 
@@ -1796,6 +1883,7 @@ public class BinhGameView : GameView
         {
             list.Remove(card);
         }
+
         culu.AddRange(list);
         return culu;
     }
@@ -1822,10 +1910,10 @@ public class BinhGameView : GameView
         {
             list.Remove(card);
         }
+
         tuquy.AddRange(list);
         return tuquy;
     }
-
 
 
     public void moveBack()
@@ -1840,12 +1928,9 @@ public class BinhGameView : GameView
     }
 
 
-
-
-
     public void cleanTable()
     {
-       TurnOff();
+        TurnOff();
         m_ScoreBg.SetActive(false);
         m_ScoreHand1TMP.gameObject.SetActive(false);
         m_ScoreHand2TMP.gameObject.SetActive(false);
@@ -1883,7 +1968,6 @@ public class BinhGameView : GameView
             }
         }
     }
-
 
 
     void showJackpotWin(string name, int chip)
@@ -1927,8 +2011,10 @@ public class BinhGameView : GameView
                     m_RankImgs[idexPos].sprite = m_RankImageSs[0];
                 m_RankImgs[idexPos].SetNativeSize();
             }
+
             splitChi(player);
         }
+
         if (stateGame == Globals.STATE_GAME.PLAYING)
         {
             onClickXepLai();
@@ -1963,7 +2049,6 @@ public class BinhGameView : GameView
         yield return new WaitForSeconds(additionalDelayTime);
         yield return new WaitForSeconds(2.0f);
         StartCoroutine(CheckCanClearEverySecond());
-
     }
 
     private IEnumerator CheckCanClearEverySecond()
@@ -1977,6 +2062,7 @@ public class BinhGameView : GameView
                 handleFinishGame();
                 yield break;
             }
+
             yield return new WaitForSeconds(1f);
         }
     }
@@ -1994,7 +2080,8 @@ public class BinhGameView : GameView
         {
             await Task.Delay(4000);
         }
-       TurnOff();
+
+        TurnOff();
         await Task.Delay(1000);
         for (var i = 0; i < players.Count; i++)
         {
@@ -2006,6 +2093,7 @@ public class BinhGameView : GameView
             m_BurnedIcons[idexPos].SetActive(false);
             clearAllCard(player);
         }
+
         showWinLose();
     }
 
@@ -2034,6 +2122,7 @@ public class BinhGameView : GameView
                         player.playerView.chipJackpot = 0;
                     }
                 }
+
                 SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.THROW_CHIP);
 
                 for (var j = 0; j < 10; j++)
@@ -2061,16 +2150,19 @@ public class BinhGameView : GameView
                     }
                 }
             }
+
             if (player == thisPlayer)
             {
                 //
             }
         }
+
         await Task.Delay(3000);
         for (var i = 0; i < chipsLose.Count; i++)
         {
             putChip(chipsLose[i]);
         }
+
         for (var i = 0; i < players.Count; i++)
         {
             Player player = players[i];
@@ -2088,29 +2180,31 @@ public class BinhGameView : GameView
                     posPot.y = UnityEngine.Random.Range(0, 80) - 40;
                     ChipBet chip = getChip();
                     chip.transform.localPosition = posPot;
-                    chip.transform.DOLocalMove(player.playerView.transform.localPosition, 0.8f).SetEase(Ease.InOutCubic).SetDelay(0.075f * j).OnComplete(() =>
-                    {
-                        putChip(chip);
-                        if (!checkWin)
+                    chip.transform.DOLocalMove(player.playerView.transform.localPosition, 0.8f).SetEase(Ease.InOutCubic)
+                        .SetDelay(0.075f * j).OnComplete(() =>
                         {
-                            checkWin = true;
-                            player.playerView.setEffectWin("", false);
-                            player.playerView.effectFlyMoney(player.mauBinh_M, 40);
-                            for (var k = 0; k < _DataFinishJA.Count; k++)
+                            putChip(chip);
+                            if (!checkWin)
                             {
-                                JObject data = (JObject)_DataFinishJA[k];
-                                if (player.namePl.Equals(getString(data, "N")))
+                                checkWin = true;
+                                player.playerView.setEffectWin("", false);
+                                player.playerView.effectFlyMoney(player.mauBinh_M, 40);
+                                for (var k = 0; k < _DataFinishJA.Count; k++)
                                 {
-                                    player.ag = (long)data["AG"];
-                                    player.setAg();
-                                    player.playerView.chipJackpot = 0;
+                                    JObject data = (JObject)_DataFinishJA[k];
+                                    if (player.namePl.Equals(getString(data, "N")))
+                                    {
+                                        player.ag = (long)data["AG"];
+                                        player.setAg();
+                                        player.playerView.chipJackpot = 0;
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
                 }
             }
         }
+
         stateGame = Globals.STATE_GAME.WAITING;
         SocketSend.sendUpdateJackpot((int)Globals.GAMEID.PUSOY);
     }
@@ -2156,6 +2250,7 @@ public class BinhGameView : GameView
         if (score > 0) lbScore.color = Color.yellow;
         else lbScore.color = Color.white;
     }
+
     public void countDown(int time)
     {
         m_BgTimeRemainImg.DOKill();
@@ -2192,12 +2287,15 @@ public class BinhGameView : GameView
         TextMeshProUGUI totalPoint = m_TotalPoints[index].transform.Find("textPoint").GetComponent<TextMeshProUGUI>();
         totalPoint.text = point > 0 ? "+" + point.ToString() : point.ToString();
         totalPoint.color = isColor ? Color.yellow : Color.white;
+        Debug.LogError(($"ShowPointText: {totalPoint}"));
 
         m_TotalPoints[index].transform.DOScale(1.5f, 0.2f).SetEase(Ease.InOutSine).OnComplete(() =>
         {
             m_TotalPoints[index].transform.DOScale(1f, 0.15f).SetEase(Ease.InOutSine).OnComplete(() =>
             {
-                if (turnOffOnEnd) m_TotalPoints[index].transform.DOScale(1f, 2f).OnComplete(() => m_TotalPoints[index].SetActive(false));
+                if (turnOffOnEnd)
+                    m_TotalPoints[index].transform.DOScale(1f, 2f)
+                        .OnComplete(() => m_TotalPoints[index].SetActive(false));
             });
         });
     }
@@ -2236,12 +2334,10 @@ public class BinhGameView : GameView
             if (time <= 10)
             {
                 _TimeTMP.color = Color.red;
-
             }
             else if (time <= 20)
             {
                 _TimeTMP.color = Color.yellow;
-
             }
             else
             {
@@ -2267,6 +2363,7 @@ public class BinhGameView : GameView
                 {
                     vtCard.Add(thisPlayer.vectorCard[i].code);
                 }
+
                 SocketSend.sendBinhShowCard(vtCard, _IsExit);
             }
         }
@@ -2377,11 +2474,13 @@ public class BinhGameView : GameView
                 players[i].vectorCard[j].showBorder(false);
             }
         }
+
         for (var i = 0; i < thisPlayer.vectorCard.Count; i++)
         {
             thisPlayer.vectorCard[i].setDark(false);
             thisPlayer.vectorCard[i].showBorder(false);
         }
+
         for (var i = 0; i < _CardPoolCs.Count; i++)
         {
             _CardPoolCs[i].setDark(false);
@@ -2601,9 +2700,11 @@ public class BinhGameView : GameView
         else if (_LogicManagerBLM.checkBinhDragon(thisPlayer.vectorCard)) return (int)TYPE_CARD_MAU_BINH.DRAGON;
         else if (_LogicManagerBLM.checkBinhSameColor(thisPlayer.vectorCard)) return (int)TYPE_CARD_MAU_BINH.SAME_COLOR;
         else if (_LogicManagerBLM.checkBinhSixPairs(thisPlayer.vectorCard)) return (int)TYPE_CARD_MAU_BINH.SIX_PAIRS;
-        else if (_LogicManagerBLM.checkBinhThreeStraights(thisPlayer.vectorChi1, thisPlayer.vectorChi2, thisPlayer.vectorChi3))
+        else if (_LogicManagerBLM.checkBinhThreeStraights(thisPlayer.vectorChi1, thisPlayer.vectorChi2,
+                     thisPlayer.vectorChi3))
             return (int)TYPE_CARD_MAU_BINH.THREE_STRAIGHT;
-        else if (_LogicManagerBLM.checkBinhThreeFlushes(thisPlayer.vectorChi1, thisPlayer.vectorChi2, thisPlayer.vectorChi3))
+        else if (_LogicManagerBLM.checkBinhThreeFlushes(thisPlayer.vectorChi1, thisPlayer.vectorChi2,
+                     thisPlayer.vectorChi3))
             return (int)TYPE_CARD_MAU_BINH.THREE_FLUSHES;
         return (int)TYPE_CARD_MAU_BINH.NONE;
     }
@@ -2750,7 +2851,6 @@ public class BinhGameView : GameView
     }
 
 
-
     public void showHintForPlayer()
     {
         List<Card> listCard = new(thisPlayer.vectorCard);
@@ -2848,7 +2948,8 @@ public class BinhGameView : GameView
 
         if (!isShow) return;
 
-        m_Star.transform.position = new Vector3(m_Star.transform.position.x, m_HintRankImgs[index].transform.position.y, m_Star.transform.position.z);
+        m_Star.transform.position = new Vector3(m_Star.transform.position.x, m_HintRankImgs[index].transform.position.y,
+            m_Star.transform.position.z);
         //ic_star.GetComponent<RectTransform>().sizeDelta = new Vector2(10, 10);
         //ic_star.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, -180);
         //ic_star.GetComponent<RectTransform>().localScale = new Vector3(10, 10, 10);
@@ -2995,6 +3096,7 @@ public class BinhGameView : GameView
                     test.Sort((x, y) => x.S.CompareTo(y.S));
                     test.RemoveAt(0);
                 }
+
                 listXam.Add(test);
             }
         }
@@ -3317,6 +3419,7 @@ public class BinhGameView : GameView
         {
             player.timeSwapCard = time - UnityEngine.Random.Range(1, 4);
         }
+
         if (time <= player.timeSwapCard && m_BgTimeRemainImg.IsActive())
         {
             player.timeSwapCard = time - UnityEngine.Random.Range(1, 3);
@@ -3360,6 +3463,7 @@ public class BinhGameView : GameView
         {
             card = Instantiate(m_PrefabCardC, m_Cards.transform);
         }
+
         card.gameObject.SetActive(true);
         return card;
     }
@@ -3380,6 +3484,7 @@ public class BinhGameView : GameView
             var card = player.vectorCard[i];
             putCard(card);
         }
+
         player.vectorCard.Clear();
         player.vectorChi1.Clear();
         player.vectorChi2.Clear();
@@ -3399,6 +3504,7 @@ public class BinhGameView : GameView
         {
             chip = Instantiate(m_PrefabChipCB, m_Chips.transform);
         }
+
         chip.gameObject.SetActive(true);
         chip.transform.localScale = new Vector2(0.5f, 0.5f);
         return chip;
@@ -3596,12 +3702,15 @@ public class BinhGameView : GameView
 
         return x;
     }
+
     private void OnPointerUp(PointerEventData eventData)
     {
         Card cardC = null;
         List<RaycastResult> rrs = new();
         EventSystem.current.RaycastAll(eventData, rrs);
-        foreach (RaycastResult item in rrs) if (item.gameObject.TryGetComponent<Card>(out cardC)) break;
+        foreach (RaycastResult item in rrs)
+            if (item.gameObject.TryGetComponent<Card>(out cardC))
+                break;
         if (cardC == null) return;
         if (!thisPlayer.vectorCard.Contains(cardC)) return;
         int cardId = thisPlayer.vectorCard.IndexOf(cardC);
@@ -3610,15 +3719,18 @@ public class BinhGameView : GameView
             foreach (Card card in thisPlayer.vectorCard) card.showBorder(false);
             m_ChosenCardsBCGC.ChosenIds.Clear();
         }
+
         bool isAlreadyChosen = m_ChosenCardsBCGC.ChosenIds.Contains(cardId);
         if (isAlreadyChosen) m_ChosenCardsBCGC.ChosenIds.Remove(cardId);
         else m_ChosenCardsBCGC.ChosenIds.Add(cardId);
         // cardC.setDark(!isChosen);
         cardC.showBorder(!isAlreadyChosen);
     }
+
     private void OnPointerDown(PointerEventData eventData)
     {
     }
+
     void OnBeginDrag(PointerEventData eventData)
     {
         if (m_ChosenCardsBCGC.ChosenIds.Count <= 0)
@@ -3626,7 +3738,9 @@ public class BinhGameView : GameView
             Card cardC = null;
             List<RaycastResult> rrs = new();
             EventSystem.current.RaycastAll(eventData, rrs);
-            foreach (RaycastResult item in rrs) if (item.gameObject.TryGetComponent<Card>(out cardC)) break;
+            foreach (RaycastResult item in rrs)
+                if (item.gameObject.TryGetComponent<Card>(out cardC))
+                    break;
             if (cardC == null) return;
             if (!thisPlayer.vectorCard.Contains(cardC)) return;
             int cardId = thisPlayer.vectorCard.IndexOf(cardC);
@@ -3636,6 +3750,7 @@ public class BinhGameView : GameView
             // cardC.setDark(!isChosen);
             cardC.showBorder(!isChosen);
         }
+
         m_ChosenCardsBCGC.FakeChosenCs.Clear();
         foreach (Card itemCard in thisPlayer.vectorCard) DOTween.Complete(itemCard.transform);
         foreach (int id in m_ChosenCardsBCGC.ChosenIds)
@@ -3652,6 +3767,7 @@ public class BinhGameView : GameView
                     break;
                 }
             }
+
             if (fakeCard == null) fakeCard = Instantiate(m_PrefabCardC, m_Cards1.transform);
             fakeCard.transform.SetSiblingIndex(m_Cards1.transform.childCount - 2); // cái cuối là UX manager
             fakeCard.transform.localScale = card.transform.localScale;
@@ -3662,10 +3778,12 @@ public class BinhGameView : GameView
             fakeCard.gameObject.SetActive(true);
             m_ChosenCardsBCGC.FakeChosenCs.Add(fakeCard);
         }
+
         _CardsCenterV2 = Vector2.zero;
         foreach (Card card in m_ChosenCardsBCGC.FakeChosenCs) _CardsCenterV2 += (Vector2)card.transform.localPosition;
         _CardsCenterV2 /= m_ChosenCardsBCGC.FakeChosenCs.Count;
     }
+
     void OnDrag(PointerEventData eventData)
     {
         if (m_ChosenCardsBCGC.FakeChosenCs.Count <= 0 || m_ChosenCardsBCGC.FakeChosenCs.Count > 5) return;
@@ -3678,10 +3796,12 @@ public class BinhGameView : GameView
             _CardsCenterV2 = posTouch;
             foreach (Card card in m_ChosenCardsBCGC.FakeChosenCs) card.transform.localPosition += (Vector3)offset;
         }
+
         m_ChosenCardsBCGC.TargetIds = _TryGetChiNearGroupCards(posTouch);
         if (m_ChosenCardsBCGC.TargetIds.Count <= 0) return;
         else if (m_ChosenCardsBCGC.TargetIds.Count < m_ChosenCardsBCGC.FakeChosenCs.Count) return;
-        m_ChosenCardsBCGC.TargetIds = m_ChosenCardsBCGC.TargetIds.OrderBy(id => Mathf.Abs(thisPlayer.vectorCard[id].transform.localPosition.x - posTouch.x)).ToList();
+        m_ChosenCardsBCGC.TargetIds = m_ChosenCardsBCGC.TargetIds
+            .OrderBy(id => Mathf.Abs(thisPlayer.vectorCard[id].transform.localPosition.x - posTouch.x)).ToList();
         while (m_ChosenCardsBCGC.TargetIds.Count > m_ChosenCardsBCGC.FakeChosenCs.Count)
             m_ChosenCardsBCGC.TargetIds.Remove(m_ChosenCardsBCGC.TargetIds.Last());
         m_ChosenCardsBCGC.TargetIds = m_ChosenCardsBCGC.TargetIds.OrderBy(x => x).ToList();
@@ -3692,6 +3812,7 @@ public class BinhGameView : GameView
             // thisPlayer.vectorCard[i].setDark(isTarget);
         }
     }
+
     void OnEndDrag(PointerEventData eventData)
     {
         if (m_ChosenCardsBCGC.TargetIds.Count > 0)
@@ -3699,55 +3820,68 @@ public class BinhGameView : GameView
             if (m_ChosenCardsBCGC.TargetIds.Count >= m_ChosenCardsBCGC.FakeChosenCs.Count)
             {
                 List<int> sameIds = new();
-                foreach (int id in m_ChosenCardsBCGC.ChosenIds) if (m_ChosenCardsBCGC.TargetIds.Contains(id)) sameIds.Add(id);
+                foreach (int id in m_ChosenCardsBCGC.ChosenIds)
+                    if (m_ChosenCardsBCGC.TargetIds.Contains(id))
+                        sameIds.Add(id);
                 foreach (int id in sameIds)
                 {
                     m_ChosenCardsBCGC.ChosenIds.Remove(id);
                     m_ChosenCardsBCGC.TargetIds.Remove(id);
                 }
+
                 for (int i = 0; i < m_ChosenCardsBCGC.ChosenIds.Count; i++)
                 {
-                    Card card1 = thisPlayer.vectorCard[m_ChosenCardsBCGC.ChosenIds[i]], card2 = thisPlayer.vectorCard[m_ChosenCardsBCGC.TargetIds[i]];
+                    Card card1 = thisPlayer.vectorCard[m_ChosenCardsBCGC.ChosenIds[i]],
+                        card2 = thisPlayer.vectorCard[m_ChosenCardsBCGC.TargetIds[i]];
                     Vector3 card1V3 = card1.transform.localPosition, card2V3 = card2.transform.localPosition;
                     // card1.transform.DOLocalMove(card2V3, .3f).SetEase(Ease.InOutCubic);
                     // card2.transform.DOLocalMove(card1V3, .03f);
                     card1.transform.localPosition = card2V3;
                     card2.transform.localPosition = card1V3;
-                    SwapIndex(ref thisPlayer.vectorCard, m_ChosenCardsBCGC.ChosenIds[i], m_ChosenCardsBCGC.TargetIds[i]);
+                    SwapIndex(ref thisPlayer.vectorCard, m_ChosenCardsBCGC.ChosenIds[i],
+                        m_ChosenCardsBCGC.TargetIds[i]);
                 }
+
                 splitChi(thisPlayer);
                 updateTextBinh();
             }
         }
+
         foreach (Card card in m_ChosenCardsBCGC.FakeChosenCs) card.gameObject.SetActive(false);
         foreach (Card card in thisPlayer.vectorCard)
         {
             // card.setDark(false);
             card.showBorder(false);
         }
+
         m_ChosenCardsBCGC.ChosenIds.Clear();
     }
+
     private void SwapIndex(ref List<Card> list, int n, int m)
     {
         Card card = list[n];
         list[n] = list[m];
         list[m] = card;
     }
+
     private List<int> _TryGetChiNearGroupCards(Vector2 posTouch)
     {
         for (int i = 0; i < thisPlayer.vectorCard.Count; i++)
         {
             if (m_ChosenCardsBCGC.FakeChosenCs.Contains(thisPlayer.vectorCard[i])) continue;
             Vector2 cardV2 = thisPlayer.vectorCard[i].transform.localPosition;
-            if (Mathf.Abs(cardV2.x - posTouch.x) <= _CardsCheckOffset && Mathf.Abs(cardV2.y - posTouch.y) <= _CardsCheckOffset)
+            if (Mathf.Abs(cardV2.x - posTouch.x) <= _CardsCheckOffset &&
+                Mathf.Abs(cardV2.y - posTouch.y) <= _CardsCheckOffset)
             {
                 if (i <= 2) return new() { 0, 1, 2 };
                 else if (i <= 7) return new() { 3, 4, 5, 6, 7 };
                 else return new() { 8, 9, 10, 11, 12 };
             }
         }
+
         return new List<int>();
     }
+
     protected override void Start()
     {
         base.Start();
@@ -3758,16 +3892,13 @@ public class BinhGameView : GameView
         m_JackpotAnimA.transform.localScale = Vector2.zero;
         var pos = m_JackpotAnimA.transform.localPosition;
         var parent = m_JackpotAnimA.transform.parent.GetComponent<RectTransform>();
-        DOTween.Sequence().Append(m_JackpotAnimA.transform.DOScale(Vector2.one, .2f).SetEase(Ease.OutBack)).AppendInterval(1).AppendCallback(() =>
-        {
-            m_JackpotAnimA.Play();
-        });
-        DOTween.Sequence().AppendCallback(() =>
-        {
-            SocketSend.sendUpdateJackpot(Globals.Config.curGameId);
-        }).AppendInterval(5.0f).SetLoops(-1).SetId("updateJackpot");
+        DOTween.Sequence().Append(m_JackpotAnimA.transform.DOScale(Vector2.one, .2f).SetEase(Ease.OutBack))
+            .AppendInterval(1).AppendCallback(() => { m_JackpotAnimA.Play(); });
+        DOTween.Sequence().AppendCallback(() => { SocketSend.sendUpdateJackpot(Globals.Config.curGameId); })
+            .AppendInterval(5.0f).SetLoops(-1).SetId("updateJackpot");
         SocketSend.sendUpdateJackpot((int)Globals.GAMEID.PUSOY);
     }
+
     protected override void Awake()
     {
         base.Awake();
