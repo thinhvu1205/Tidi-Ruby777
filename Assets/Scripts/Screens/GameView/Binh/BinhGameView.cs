@@ -580,7 +580,6 @@ public class BinhGameView : GameView
 
             await Task.Delay(2000);
         }
-
         if (num > 1)
         {
             showChi3();
@@ -720,7 +719,6 @@ public class BinhGameView : GameView
             var firstTotalPoint = player.scoreChi1 + player.scoreChi2 + player.scoreChi3 + player.bonusChi1 +
                                   player.bonusChi2 + player.bonusChi3;
             player.totalPoint += firstTotalPoint;
-            Debug.LogError($"ShowPoint:{player.totalPoint}");
             if (player == thisPlayer && stateGame == Globals.STATE_GAME.VIEWING)
                 continue;
 
@@ -741,7 +739,6 @@ public class BinhGameView : GameView
 
                 player.totalPoint += point;
                 player1.totalPoint -= point;
-                Debug.LogError($"ShowPoint:{player.totalPoint}");
             }
         }
 
@@ -861,7 +858,6 @@ public class BinhGameView : GameView
                     {
                         player.totalPoint += point;
                         player1.totalPoint -= point;
-                        Debug.LogError($"ShowPoint:{player.totalPoint}");
                         int fromPos = getDynamicIndex(getIndexOf(player));
                         int toPos = getDynamicIndex(getIndexOf(player1));
 
@@ -1085,7 +1081,6 @@ public class BinhGameView : GameView
 
         shotPlayer.totalPoint += point;
         player.totalPoint -= point;
-        Debug.LogError($"ShowPoint:{player.totalPoint}");
         setPointTotal(shotPlayer, fromPos, true);
         setPointTotal(player, toPos, true);
     }
@@ -1170,14 +1165,12 @@ public class BinhGameView : GameView
                         {
                             player.totalPoint += point;
                             curPlayer.totalPoint -= point;
-                            Debug.LogError($"ShowPoint:{player.totalPoint}");
                         }
                     }
                     else
                     {
                         player.totalPoint += point;
                         curPlayer.totalPoint -= point;
-                        Debug.LogError($"ShowPoint:{player.totalPoint}");
                     }
 
                     setPointTotal(player, pos1);
@@ -1242,7 +1235,6 @@ public class BinhGameView : GameView
                 continue;
 
             player.totalPoint += player.scoreChi1 + player.bonusChi1;
-            Debug.LogError($"ShowPoint:{player.totalPoint}");
             if (player.scoreChi1 + player.bonusChi1 > 0)
                 isBest = true;
             else
@@ -1332,7 +1324,6 @@ public class BinhGameView : GameView
                 continue;
 
             player.totalPoint += player.scoreChi2 + player.bonusChi2;
-            Debug.LogError($"ShowPoint:{player.totalPoint}");
             if (player.scoreChi2 + player.bonusChi2 > 0)
                 isBest = true;
             else
@@ -1437,7 +1428,6 @@ public class BinhGameView : GameView
                 continue;
 
             player.totalPoint += player.scoreChi3 + player.scoreChi3;
-            Debug.LogError($"ShowPoint:{player.totalPoint}");
             if (player.scoreChi3 + player.scoreChi3 > 0)
                 isBest = true;
             else
@@ -2287,7 +2277,6 @@ public class BinhGameView : GameView
         TextMeshProUGUI totalPoint = m_TotalPoints[index].transform.Find("textPoint").GetComponent<TextMeshProUGUI>();
         totalPoint.text = point > 0 ? "+" + point.ToString() : point.ToString();
         totalPoint.color = isColor ? Color.yellow : Color.white;
-        Debug.LogError(($"ShowPointText: {totalPoint}"));
 
         m_TotalPoints[index].transform.DOScale(1.5f, 0.2f).SetEase(Ease.InOutSine).OnComplete(() =>
         {
