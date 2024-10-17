@@ -315,7 +315,6 @@ public class BinhGameView : GameView
 
     private void _HandleCountdownToStart(JObject data)
     {
-        Debug.LogError($"Data_HandleCountdownToStart {data.ToString()}");
         cleanTable();
         for (var i = 0; i < players.Count; i++)
         {
@@ -340,7 +339,6 @@ public class BinhGameView : GameView
 
     private async void _HandleLC(JObject data)
     {
-        Debug.LogError($"Data_HandleLC {data.ToString()}");
         SoundManager.instance.playEffectFromPath(Globals.SOUND_GAME.START_GAME);
         updatePositionPlayerView();
         m_StartSG.gameObject.SetActive(true);
@@ -391,7 +389,6 @@ public class BinhGameView : GameView
 
     private void _HandleDeclare(JObject data)
     {
-        Debug.LogError($"Data__HandleDeclare {data.ToString()}");
         Player player = getPlayer(getString(data, "Name"));
         if (player == thisPlayer)
         {
@@ -403,7 +400,6 @@ public class BinhGameView : GameView
 
     private void _HandleCompareHands(JObject data)
     {
-        Debug.LogError($"Data_HandleCompareHands {data.ToString()}");
         string name = getString(data, "Name");
         var player = getPlayer(name);
         if (player != thisPlayer)
@@ -479,6 +475,7 @@ public class BinhGameView : GameView
                 continue;
             player.mauBinh_M = (int)jpl["M"];
             player.mauBinh_BL = getBool(jpl, "BL");
+            // Debug.LogError($"RunMethod_HandleFinishGame/ player.mauBinh_BL:{player.mauBinh_BL}/ player.mauBinh_MB:{player.mauBinh_MB}");
             player.mauBinh_MB = (int)jpl["MB"];
             player.scoreChi1 = (int)jpl["hesochi1"];
             player.scoreChi2 = (int)jpl["hesochi2"];
@@ -589,17 +586,18 @@ public class BinhGameView : GameView
             await Task.Delay(2000);
         }
         //TODO all user Burned
-        for (int i = 0; i < players.Count; i++)
-        {
-            if (!m_BurnedIcons[i].activeSelf)
-            {
+        // for (int i = 0; i < players.Count; i++)
+        // {
+        //     if (!m_BurnedIcons[i].activeSelf)
+        //     {
 
-            }
-            else
-            {
-                Debug.LogError($"All User Burned");
-            }
-        }
+        //     }
+        //     else
+        //     {
+        //         Debug.LogError($"All User Burned");
+        //     }
+        // }
+        Debug.LogError($"{num}");
         if (num > 1)
         {
             showChi3();
@@ -611,6 +609,32 @@ public class BinhGameView : GameView
             for (var i = 0; i < 4; i++)
                 m_RankImgs[i].gameObject.SetActive(false);
             await Task.Delay(2000);
+        }
+        else if (num == 1)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                var player = players[i];
+
+                if (player == thisPlayer && stateGame == Globals.STATE_GAME.VIEWING)
+                    continue;
+                var firstTotalPoint = player.scoreChi1 + player.scoreChi2 + player.scoreChi3 + player.bonusChi1 +
+                                player.bonusChi2 + player.bonusChi3;
+                player.totalPoint += firstTotalPoint;
+
+                setPointTotal(player, getDynamicIndex(getIndexOf(player)));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                var player = players[i];
+                if (player == thisPlayer && stateGame == Globals.STATE_GAME.VIEWING)
+                    continue;
+                player.totalPoint = 0;
+                setPointTotal(player, getDynamicIndex(getIndexOf(player)));
+            }
         }
 
         doEndGameFlow();
@@ -710,6 +734,7 @@ public class BinhGameView : GameView
             player.mauBinh_M = (int)jpl["M"];
             player.mauBinh_BL = (bool)jpl["BL"];
             player.mauBinh_MB = (int)jpl["MB"];
+            // Debug.LogError($"RunMethod_ViewIng/ Player.maubinh_BL:{player.mauBinh_BL}/ PLayer.mauBinh_MB:{player.mauBinh_MB}");
             player.scoreChi1 = (int)jpl["hesochi1"];
             player.scoreChi2 = (int)jpl["hesochi2"];
             player.scoreChi3 = (int)jpl["hesochi3"];
@@ -873,6 +898,7 @@ public class BinhGameView : GameView
                             break;
                         }
                     }
+
                     //TODO: chay anim ten lua
                     if (!player1.isSapLang)
                     {
