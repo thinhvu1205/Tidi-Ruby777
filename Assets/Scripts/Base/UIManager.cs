@@ -32,6 +32,12 @@ using System.Threading;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private Card card;
+    public int idCard;
+    [ContextMenu("Test")]
+    private void Test(){
+        card.setTextureWithCode(idCard);
+    }
     public static UIManager instance = null;
     [SerializeField] Sprite sf_toast = null;
     [SerializeField] GameObject nodeLoad;

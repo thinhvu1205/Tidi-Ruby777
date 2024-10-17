@@ -585,18 +585,7 @@ public class BinhGameView : GameView
 
             await Task.Delay(2000);
         }
-        //TODO all user Burned
-        // for (int i = 0; i < players.Count; i++)
-        // {
-        //     if (!m_BurnedIcons[i].activeSelf)
-        //     {
 
-        //     }
-        //     else
-        //     {
-        //         Debug.LogError($"All User Burned");
-        //     }
-        // }
         Debug.LogError($"{num}");
         if (num > 1)
         {
