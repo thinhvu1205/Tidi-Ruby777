@@ -204,10 +204,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0264a2db20537954cbeec577c3838c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animBomb: {fileID: 8060032884685869720}
+  m_AnimBomb: {fileID: 8060032884685869720}
   buttonClick: {fileID: 3314120265831003735}
-  selectedGold: {fileID: 9079716536472629366}
-  unselectedGold: {fileID: 2430731574882299146}
+  m_SelectedGold: {fileID: 9079716536472629366}
+  m_UnselectedGold: {fileID: 2430731574882299146}
   iconSelected: {fileID: 4996182569382853188}
   iconUnselected: {fileID: 6714589571424004871}
   selectable: {fileID: 6872592516076238497}

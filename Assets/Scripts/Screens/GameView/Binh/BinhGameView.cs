@@ -599,33 +599,6 @@ public class BinhGameView : GameView
                 m_RankImgs[i].gameObject.SetActive(false);
             await Task.Delay(2000);
         }
-        else if (num == 1)
-        {
-            for (int i = 0; i < players.Count; i++)
-            {
-                var player = players[i];
-
-                if (player == thisPlayer && stateGame == Globals.STATE_GAME.VIEWING)
-                    continue;
-                var firstTotalPoint = player.scoreChi1 + player.scoreChi2 + player.scoreChi3 + player.bonusChi1 +
-                                player.bonusChi2 + player.bonusChi3;
-                player.totalPoint += firstTotalPoint;
-
-                setPointTotal(player, getDynamicIndex(getIndexOf(player)));
-            }
-        }
-        else
-        {
-            for (int i = 0; i < players.Count; i++)
-            {
-                var player = players[i];
-                if (player == thisPlayer && stateGame == Globals.STATE_GAME.VIEWING)
-                    continue;
-                player.totalPoint = 0;
-                setPointTotal(player, getDynamicIndex(getIndexOf(player)));
-            }
-        }
-
         doEndGameFlow();
     }
 
