@@ -31,6 +31,6 @@ public class TinhDialogLose : MonoBehaviour
     {
         gameObject.SetActive(false);
         OnHideDialogLose?.Invoke();
-        SceneManager.LoadScene("TestScene");
+        // SceneManager.LoadScene("TestScene");
     }
 }

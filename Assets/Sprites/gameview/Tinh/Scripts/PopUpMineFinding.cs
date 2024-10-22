@@ -21,6 +21,7 @@ public class PopUpMineFinding : MonoBehaviour
     [SerializeField]
     private GameObject m_Dialog, m_Bet, m_DropDownBomb, m_RandomChoose, m_TurnInputField, m_WinInputField, m_LoseInputField;
     private bool _OverListSlot = false;
+    private int _StartBetCount = 100000;
     private const string _TotalChipKey = "_TotalChipKey";
     private long _BaseBet, _FinalChangedChips, _AdjustBet;
     public int _BetCount = 100000;
@@ -34,16 +35,9 @@ public class PopUpMineFinding : MonoBehaviour
         set => PlayerPrefs.SetInt(_TotalChipKey, value);
     }
     public static PopUpMineFinding instance = null;
-    #region Button
-    private void _ClickButtonPlay()
+     private IEnumerator _WaitActiveBomb()
     {
-        BetCountLose = _BetCount;
-        TotalChip -= _BetCount;
-        m_TotalChipTMP.text = _FormatTMP(TotalChip);
-        m_RandomChooseBtn.interactable = true;
-        m_StartNormalBtn.gameObject.SetActive(false);
-        m_WithDrawBtn.gameObject.SetActive(true);
-        RotateSequentially(0);
+        yield return new WaitForSeconds(1.25f);
         for (int i = 0; i < _CountBombs; i++)
         {
             int rnd = _RandomActiveBomb();
@@ -51,6 +45,26 @@ public class PopUpMineFinding : MonoBehaviour
             m_ListSlot[rnd].AnimBom.gameObject.SetActive(true);
         }
     }
+    #region Button
+    private void _ClickButtonPlayNormal()
+    {
+        Debug.LogError($"_BetCount: {_BetCount}");
+        CountClickMouse = 0;
+        _BetCount = _StartBetCount;
+        BetCountLose = _StartBetCount;
+        TotalChip -= _StartBetCount;
+        m_TotalChipTMP.text = _FormatTMP(TotalChip);
+        m_WithDrawTMP.text = _FormatTMP(_StartBetCount);
+        m_RandomChooseBtn.interactable = true;
+        m_StartNormalBtn.gameObject.SetActive(false);
+        m_WithDrawBtn.gameObject.SetActive(true);
+        RotateSequentially(0);
+        StartCoroutine(_WaitActiveBomb());
+    }
+    private void _ClickButtonStartAuto(){
+        Debug.LogError($"Start Auto Mode");
+    }
+   
     private void _ClickButtonNormal()
     {
         m_BgAuto.gameObject.SetActive(false);
@@ -79,34 +93,25 @@ public class PopUpMineFinding : MonoBehaviour
     {
         if (_BetCount <= 100000) return;
         _BetCount -= 50000;
-        m_BetTMP.text = _FormatTMP(_BetCount);
+        _StartBetCount = _BetCount;
+        m_BetTMP.text = _FormatTMP(_StartBetCount);
     }
     private void _CLickButtonPlus()
     {
         _BetCount += 50000;
-        m_BetTMP.text = _FormatTMP(_BetCount);
+        _StartBetCount = _BetCount;
+        m_BetTMP.text = _FormatTMP(_StartBetCount);
     }
-    private string _FormatTMP(int index)
-    {
-        if (index < 1000000)
-        {
-            // Định dạng 000k (ví dụ: 7k, 045k, 999k)
-            return $"{index / 1000:D3}k";
-        }
-        else
-        {
-            // Định dạng 1.xM (ví dụ: 1.2M, 5.0M)
-            float millions = index / 1000000f;
-            return $"{millions:0.00}M";
-        }
-    }
+   
     private void ClickDropDownBomb(int index)
     {
         _CountBombs = index + 1;
     }
     private void _ClickButtonWithDraw()
     {
-        TotalChip += _BetCount;
+        isWinGame = true;
+        _EnableDialog();
+        _UpdateTotoalChip();
     }
     private void _ClickButtonRandomChoose()
     {
@@ -127,7 +132,7 @@ public class PopUpMineFinding : MonoBehaviour
                     //TODO win game
                     isWinGame = true;
                     _EnableDialog();
-                    TotalChip += _BetCount;
+                    _UpdateTotoalChip();
                     Debug.LogError($"Win Game");
                 }
             }
@@ -143,6 +148,25 @@ public class PopUpMineFinding : MonoBehaviour
         }
     }
     #endregion
+     private string _FormatTMP(int index)
+    {
+        if (index < 1000000)
+        {
+            // Định dạng 000k (ví dụ: 7k, 045k, 999k)
+            return $"{index / 1000:D3}k";
+        }
+        else
+        {
+            // Định dạng 1.xM (ví dụ: 1.2M, 5.0M)
+            float millions = index / 1000000f;
+            return $"{millions:0.00}M";
+        }
+    }
+    public void _UpdateTotoalChip()
+    {
+        TotalChip += _BetCount;
+        m_TotalChipTMP.text = _FormatTMP(TotalChip);
+    }
     private int _RandomActiveBomb()
     {
         List<int> rndList = new List<int>();
@@ -198,12 +222,14 @@ public class PopUpMineFinding : MonoBehaviour
         {
             return;
         }
-        DOVirtual.DelayedCall(0.075f, () =>
+        DOVirtual.DelayedCall(0.05f, () =>
         {
             m_ListSlot[index].unSelectable.gameObject.SetActive(false);
             m_ListSlot[index].selectable.gameObject.SetActive(true);
             m_ListSlot[index].UnselectedGold.gameObject.SetActive(true);
+            m_ListSlot[index].SelectedGold.gameObject.SetActive(true);
             m_ListSlot[index].AnimBom.AnimationState.SetAnimation(0, "normal", true);
+            m_ListSlot[index].AnimBom.gameObject.SetActive(false);
             m_ListSlot[index].SelectedGold.transform.DORotate(new Vector3(0, 0, 0), 0);
         }).OnComplete(() => { RotateSequentially(index + 1); });
     }
@@ -218,13 +244,14 @@ public class PopUpMineFinding : MonoBehaviour
     {
 
         m_BombsDd.onValueChanged.AddListener(ClickDropDownBomb);
-        m_StartNormalBtn.onClick.AddListener(_ClickButtonPlay);
+        m_StartNormalBtn.onClick.AddListener(_ClickButtonPlayNormal);
         m_NormalBtn.onClick.AddListener(_ClickButtonNormal);
         m_AutoBntn.onClick.AddListener(_ClickButtonAuto);
         m_MinusBtn.onClick.AddListener(_CLickButtonMinus);
         m_PlusBtn.onClick.AddListener(_CLickButtonPlus);
         m_RandomChooseBtn.onClick.AddListener(_ClickButtonRandomChoose);
         m_WithDrawBtn.onClick.AddListener(_ClickButtonWithDraw);
+        m_StartAutoBetBtn.onClick.AddListener(_ClickButtonStartAuto);
     }
     void Update()
     {

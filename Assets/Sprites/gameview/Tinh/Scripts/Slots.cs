@@ -31,7 +31,7 @@ public class Slots : MonoBehaviour
                  //TODO win game
                  PopUpMineFinding.instance.isWinGame = true;
                  PopUpMineFinding.instance._EnableDialog();
-                 PopUpMineFinding.instance.TotalChip+=PopUpMineFinding.instance._BetCount;
+                 PopUpMineFinding.instance._UpdateTotoalChip();
                 Debug.LogError($"Win Game");
             }
         }
